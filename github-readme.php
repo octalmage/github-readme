@@ -16,25 +16,30 @@ function github_readme_func( $atts )
 	    'trim' => 0
 	), $atts ) );
 	
-	$url="https://api.github.com/repos/" . $repo . "/readme";
-	
-	$ch = curl_init();
-	$timeout = 5;
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch,CURLOPT_USERAGENT,'WordPress');
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-	$data = curl_exec($ch);
-	curl_close($ch);
-
-	$json=json_decode($data);
- 	$markdown=base64_decode($json->content);
-	if ($trim>0)
+	$transient="github_readme_" . $repo . "_" . $trim;
+	if ( false === ( $html = get_transient($transient))) 
 	{
-		$markdown = implode("\n", array_slice(explode("\n", $markdown), $trim)); 
-	}
+	 	$url="https://api.github.com/repos/" . $repo . "/readme";
 	
-	$html = Markdown::defaultTransform($markdown);
+		$ch = curl_init();
+		$timeout = 5;
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch,CURLOPT_USERAGENT,'WordPress');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		$data = curl_exec($ch);
+		curl_close($ch);
+
+		$json=json_decode($data);
+ 		$markdown=base64_decode($json->content);
+		if ($trim>0)
+		{
+			$markdown = implode("\n", array_slice(explode("\n", $markdown), $trim)); 
+		}
+	
+		$html = Markdown::defaultTransform($markdown);
+	 	set_transient($transient, $html , 12 * HOUR_IN_SECONDS);
+	}
 	return $html;	
 }
 ?>
