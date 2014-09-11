@@ -12,7 +12,8 @@ add_shortcode( 'github_readme', 'github_readme_func' );
 function github_readme_func( $atts ) 
 {
 	extract( shortcode_atts( array(
-		'repo' => 'octalmage/GitHub Shortcode'
+		'repo' => 'octalmage/GitHub Shortcode',
+	    'trim' => 0
 	), $atts ) );
 	
 	$url="https://api.github.com/repos/" . $repo . "/readme";
@@ -28,6 +29,10 @@ function github_readme_func( $atts )
 
 	$json=json_decode($data);
  	$markdown=base64_decode($json->content);
+	if ($trim>0)
+	{
+		$markdown = implode("\n", array_slice(explode("\n", $markdown), $trim)); 
+	}
 	
 	$html = Markdown::defaultTransform($markdown);
 	return $html;	
