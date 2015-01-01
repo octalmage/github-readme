@@ -1,7 +1,12 @@
 <?php
-/*
-Plugin Name: GitHub README
-*/
+/**
+ * Plugin GitHub README
+ * Plugin URI: https://github.com/octalmage/github-readme
+ * Description: Github README is a plugin that allows you to embed a GitHub README in a page or post using a simple shortcode.
+ * Version: 0.0.1
+ * Author: Jason Stallings
+ * Author URI: http://jason.stallin.gs
+ */
 
 require_once 'Michelf/Markdown.inc.php';
 
