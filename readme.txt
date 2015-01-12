@@ -30,5 +30,8 @@ This is useful for removing titles since your page/post will most likely already
 
 
 == Changelog ==
-= 0.1 =
+= 0.0.2 =
+* Fixed plugin header.
+
+= 0.0.1 =
 * First Version. Stable so far!
