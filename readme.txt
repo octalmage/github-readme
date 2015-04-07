@@ -18,7 +18,7 @@ Usage:
 
 **github_readme**
 
-This shortcode embeds the repositories readme. 
+This shortcode embeds the project's readme. 
 
 [github_readme repo="octalmage/Marknote"]
 
