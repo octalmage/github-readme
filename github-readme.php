@@ -88,17 +88,16 @@ function github_markdown_func( $atts )
 function github_wikipage_func( $atts )
 {
     extract( shortcode_atts( array(
-        'user' => '',
+        'repo' => 'octalmage/GitHub Shortcode',
         'trim' => 0,
         'cache' => 60,
-        'project' => '',
         'page' => ''
     ), $atts ) );
 
-    $transient="github_wikipage_" . $user . "_" . $project . "_" . $page;
+    $transient="github_wikipage_" . $repo . "_" . $page;
     if ( false === ( $html = get_transient($transient)))
     {
-        $url="https://raw.githubusercontent.com/wiki/" . $user . "/" . $project . "/" . $page . ".md";
+        $url="https://raw.githubusercontent.com/wiki/" . $repo . "/" . $page . ".md";
 
         $ch = curl_init();
         $timeout = 5;
