@@ -95,7 +95,7 @@ function github_wikipage_func( $atts )
         'page' => ''
     ), $atts ) );
 
-    $transient="github_wikipate_" . $user . "_" . $project . "_" . $page;
+    $transient="github_wikipage_" . $user . "_" . $project . "_" . $page;
     if ( false === ( $html = get_transient($transient)))
     {
         $url="https://raw.githubusercontent.com/wiki/" . $user . "/" . $project . "/" . $page . ".md";
