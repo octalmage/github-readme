@@ -40,7 +40,7 @@ trim, branch, and cache (seconds to cache) also supported.
 
 This shortcode embeds pages from a project's wiki.
 
-[github_wikipage user="octalmage" project="marknote" file="Syntax.md"]
+[github_wikipage repo="octalmage/Marknote" page="Syntax"]
 
 trim and cache also supported. 
 
