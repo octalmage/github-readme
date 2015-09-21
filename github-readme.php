@@ -32,17 +32,11 @@ function github_readme_func( $atts ) {
 	if ( false === ( $html = get_transient( $transient ) ) ) {
 		$url = "https://api.github.com/repos/" . $repo . "/readme";
 
-		$ch      = curl_init();
-		$timeout = 5;
-		curl_setopt( $ch, CURLOPT_URL, $url );
-		curl_setopt( $ch, CURLOPT_USERAGENT, 'WordPress' );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
-		$data = curl_exec( $ch );
-		curl_close( $ch );
+		$data = github_readme_get_url( $url );
 
 		$json     = json_decode( $data );
 		$markdown = base64_decode( $json->content );
+
 		if ( $trim > 0 ) {
 			$markdown = implode( "\n", array_slice( explode( "\n", $markdown ), $trim ) );
 		}
@@ -73,14 +67,7 @@ function github_markdown_func( $atts ) {
 	if ( false === ( $html = get_transient( $transient ) ) ) {
 		$url = "https://raw.githubusercontent.com/" . $repo . "/" . $branch . "/" . $file;
 
-		$ch      = curl_init();
-		$timeout = 5;
-		curl_setopt( $ch, CURLOPT_URL, $url );
-		curl_setopt( $ch, CURLOPT_USERAGENT, 'WordPress' );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
-		$markdown = curl_exec( $ch );
-		curl_close( $ch );
+		$markdown = github_readme_get_url( $url );
 
 		if ( $trim > 0 ) {
 			$markdown = implode( "\n", array_slice( explode( "\n", $markdown ), $trim ) );
@@ -111,14 +98,7 @@ function github_wikipage_func( $atts ) {
 	if ( false === ( $html = get_transient( $transient ) ) ) {
 		$url = "https://raw.githubusercontent.com/wiki/" . $repo . "/" . $page . ".md";
 
-		$ch      = curl_init();
-		$timeout = 5;
-		curl_setopt( $ch, CURLOPT_URL, $url );
-		curl_setopt( $ch, CURLOPT_USERAGENT, 'WordPress' );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
-		$markdown = curl_exec( $ch );
-		curl_close( $ch );
+		$markdown = github_readme_get_url( $url );
 
 		if ( $trim > 0 ) {
 			$markdown = implode( "\n", array_slice( explode( "\n", $markdown ), $trim ) );
@@ -129,4 +109,23 @@ function github_wikipage_func( $atts ) {
 	}
 
 	return $html;
+}
+
+/**
+ * Get data from URL.
+ *
+ * @param $url
+ *
+ * @return mixed
+ */
+function github_readme_get_url( $url ) {
+	$data = '';
+
+	$response = wp_remote_get( $url );
+
+	if ( ! empty( $response['response']['code'] ) && 200 === $response['response']['code'] && ! empty( $response['body'] ) ) {
+		$data = $response['body'];
+	}
+
+	return $data;
 }
