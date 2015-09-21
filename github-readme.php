@@ -16,6 +16,13 @@ add_shortcode( 'github_readme', 'github_readme_func' );
 add_shortcode( 'github_markdown', 'github_markdown_func' );
 add_shortcode( 'github_wikipage', 'github_wikipage_func' );
 
+/**
+ * Handler for github_readme shortcode.
+ *
+ * @param array $atts
+ *
+ * @return string
+ */
 function github_readme_func( $atts ) {
 	extract(
 		shortcode_atts(
@@ -36,10 +43,7 @@ function github_readme_func( $atts ) {
 
 		$json     = json_decode( $data );
 		$markdown = base64_decode( $json->content );
-
-		if ( $trim > 0 ) {
-			$markdown = implode( "\n", array_slice( explode( "\n", $markdown ), $trim ) );
-		}
+		$markdown = github_readme_trim_markdown( $markdown, $trim );
 
 		$html = Markdown::defaultTransform( $markdown );
 		set_transient( $transient, $html, 12 * HOUR_IN_SECONDS );
@@ -48,6 +52,13 @@ function github_readme_func( $atts ) {
 	return $html;
 }
 
+/**
+ * Handler for github_markdown shortcode.
+ *
+ * @param array $atts
+ *
+ * @return string
+ */
 function github_markdown_func( $atts ) {
 	extract(
 		shortcode_atts(
@@ -68,10 +79,7 @@ function github_markdown_func( $atts ) {
 		$url = "https://raw.githubusercontent.com/" . $repo . "/" . $branch . "/" . $file;
 
 		$markdown = github_readme_get_url( $url );
-
-		if ( $trim > 0 ) {
-			$markdown = implode( "\n", array_slice( explode( "\n", $markdown ), $trim ) );
-		}
+		$markdown = github_readme_trim_markdown( $markdown, $trim );
 
 		$html = Markdown::defaultTransform( $markdown );
 		set_transient( $transient, $html, $cache );
@@ -80,6 +88,13 @@ function github_markdown_func( $atts ) {
 	return $html;
 }
 
+/**
+ * Handler for github_wikipage shortcode.
+ *
+ * @param array $atts
+ *
+ * @return string
+ */
 function github_wikipage_func( $atts ) {
 	extract(
 		shortcode_atts(
@@ -99,10 +114,7 @@ function github_wikipage_func( $atts ) {
 		$url = "https://raw.githubusercontent.com/wiki/" . $repo . "/" . $page . ".md";
 
 		$markdown = github_readme_get_url( $url );
-
-		if ( $trim > 0 ) {
-			$markdown = implode( "\n", array_slice( explode( "\n", $markdown ), $trim ) );
-		}
+		$markdown = github_readme_trim_markdown( $markdown, $trim );
 
 		$html = Markdown::defaultTransform( $markdown );
 		set_transient( $transient, $html, $cache );
@@ -114,9 +126,9 @@ function github_wikipage_func( $atts ) {
 /**
  * Get data from URL.
  *
- * @param $url
+ * @param string $url
  *
- * @return mixed
+ * @return string
  */
 function github_readme_get_url( $url ) {
 	$data = '';
@@ -128,4 +140,22 @@ function github_readme_get_url( $url ) {
 	}
 
 	return $data;
+}
+
+/**
+ * Trim lines from begining of markdown text.
+ *
+ * @param string  $markdown
+ * @param integer $lines Optional number of lines to trim from begining of supplied markdown.
+ *
+ * @return string
+ */
+function github_readme_trim_markdown( $markdown, $lines = 0 ) {
+	if ( 0 < $lines ) {
+		$markdown = implode( "\n", array_slice( explode( "\n", $markdown ), $lines ) );
+
+		return $markdown;
+	}
+
+	return $markdown;
 }
