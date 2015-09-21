@@ -12,9 +12,9 @@ require_once 'Michelf/Markdown.inc.php';
 
 use \Michelf\Markdown;
 
-add_shortcode( 'github_readme', 'github_readme_func' );
-add_shortcode( 'github_markdown', 'github_markdown_func' );
-add_shortcode( 'github_wikipage', 'github_wikipage_func' );
+add_shortcode( 'github_readme', 'github_readme_default' );
+add_shortcode( 'github_markdown', 'github_readme_markdown' );
+add_shortcode( 'github_wikipage', 'github_readme_wikipage' );
 
 /**
  * Handler for github_readme shortcode.
@@ -23,7 +23,7 @@ add_shortcode( 'github_wikipage', 'github_wikipage_func' );
  *
  * @return string
  */
-function github_readme_func( $atts ) {
+function github_readme_default( $atts ) {
 	extract(
 		shortcode_atts(
 			array(
@@ -59,7 +59,7 @@ function github_readme_func( $atts ) {
  *
  * @return string
  */
-function github_markdown_func( $atts ) {
+function github_readme_markdown( $atts ) {
 	extract(
 		shortcode_atts(
 			array(
@@ -95,7 +95,7 @@ function github_markdown_func( $atts ) {
  *
  * @return string
  */
-function github_wikipage_func( $atts ) {
+function github_readme_wikipage( $atts ) {
 	extract(
 		shortcode_atts(
 			array(
@@ -146,7 +146,7 @@ function github_readme_get_url( $url ) {
  * Trim lines from begining of markdown text.
  *
  * @param string  $markdown
- * @param integer $lines Optional number of lines to trim from begining of supplied markdown.
+ * @param integer $lines Optional number of lines to trim from beginning of supplied markdown.
  *
  * @return string
  */
