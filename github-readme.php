@@ -36,7 +36,9 @@ function github_readme_default( $atts ) {
 
 	$transient = "github_readme_" . $repo . "_" . $trim;
 
-	if ( false === ( $html = get_transient( $transient ) ) ) {
+	$html = get_transient( $transient );
+
+	if ( false === $html ) {
 		$url = "https://api.github.com/repos/" . $repo . "/readme";
 
 		$data = github_readme_get_url( $url );
@@ -75,7 +77,9 @@ function github_readme_markdown( $atts ) {
 
 	$transient = "github_markdown_" . $repo . "_" . $file . "_" . $trim;
 
-	if ( false === ( $html = get_transient( $transient ) ) ) {
+	$html = get_transient( $transient );
+
+	if ( false === $html ) {
 		$url = "https://raw.githubusercontent.com/" . $repo . "/" . $branch . "/" . $file;
 
 		$markdown = github_readme_get_url( $url );
@@ -110,7 +114,9 @@ function github_readme_wikipage( $atts ) {
 
 	$transient = "github_wikipage_" . $repo . "_" . $page;
 
-	if ( false === ( $html = get_transient( $transient ) ) ) {
+	$html = get_transient( $transient );
+
+	if ( false === $html ) {
 		$url = "https://raw.githubusercontent.com/wiki/" . $repo . "/" . $page . ".md";
 
 		$markdown = github_readme_get_url( $url );
