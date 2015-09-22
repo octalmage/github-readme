@@ -36,9 +36,9 @@ function github_readme_default( $atts ) {
 	);
 
 	$repo = empty( $atts['repo'] ) ? $defaults['repo'] : $atts['repo'];
-	$trim = empty( $atts['trim'] ) ? $defaults['trim'] : $atts['trim'];
+	$trim = empty( $atts['trim'] ) ? $defaults['trim'] : abs( (int) $atts['trim'] );
 
-	$transient = 'github_readme_' . $repo . '_' . $trim;
+	$transient = github_readme_transient_name( 'github_readme_' . $repo . '_' . $trim );
 
 	$html = get_transient( $transient );
 
@@ -81,12 +81,12 @@ function github_readme_markdown( $atts ) {
 	);
 
 	$repo   = empty( $atts['repo'] ) ? $defaults['repo'] : $atts['repo'];
-	$trim   = empty( $atts['trim'] ) ? $defaults['trim'] : $atts['trim'];
-	$cache  = empty( $atts['cache'] ) ? $defaults['cache'] : $atts['cache'];
+	$trim   = empty( $atts['trim'] ) ? $defaults['trim'] : abs( (int) $atts['trim'] );
+	$cache  = empty( $atts['cache'] ) ? $defaults['cache'] : abs( (int) $atts['cache'] );
 	$file   = empty( $atts['file'] ) ? $defaults['file'] : $atts['file'];
 	$branch = empty( $atts['branch'] ) ? $defaults['branch'] : $atts['branch'];
 
-	$transient = 'github_markdown_' . $repo . '_' . $file . '_' . $trim;
+	$transient = github_readme_transient_name( 'github_markdown_' . $repo . '_' . $branch . '_' . $file . '_' . $trim . '_' . $cache );
 
 	$html = get_transient( $transient );
 
@@ -125,11 +125,11 @@ function github_readme_wikipage( $atts ) {
 	);
 
 	$repo  = empty( $atts['repo'] ) ? $defaults['repo'] : $atts['repo'];
-	$trim  = empty( $atts['trim'] ) ? $defaults['trim'] : $atts['trim'];
-	$cache = empty( $atts['cache'] ) ? $defaults['cache'] : $atts['cache'];
+	$trim  = empty( $atts['trim'] ) ? $defaults['trim'] : abs( (int) $atts['trim'] );
+	$cache = empty( $atts['cache'] ) ? $defaults['cache'] : abs( (int) $atts['cache'] );
 	$page  = empty( $atts['page'] ) ? $defaults['page'] : $atts['page'];
 
-	$transient = 'github_wikipage_' . $repo . '_' . $page;
+	$transient = github_readme_transient_name( 'github_wikipage_' . $repo . '_' . $page . '_' . $trim . '_' . $cache );
 
 	$html = get_transient( $transient );
 
@@ -166,7 +166,7 @@ function github_readme_get_url( $url ) {
 }
 
 /**
- * Trim lines from begining of markdown text.
+ * Trim lines from beginning of markdown text.
  *
  * @param string  $markdown
  * @param integer $lines Optional number of lines to trim from beginning of supplied markdown.
@@ -181,4 +181,15 @@ function github_readme_trim_markdown( $markdown, $lines = 0 ) {
 	}
 
 	return $markdown;
+}
+
+/**
+ * Returns a string that can be used as a transient name without possible truncation or invalid character problems.
+ *
+ * @param string $key
+ *
+ * @return string
+ */
+function github_readme_transient_name( $key ) {
+	return 'github_readme_' . md5( $key );
 }
