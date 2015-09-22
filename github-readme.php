@@ -24,15 +24,19 @@ add_shortcode( 'github_wikipage', 'github_readme_wikipage' );
  * @return string
  */
 function github_readme_default( $atts ) {
-	extract(
-		shortcode_atts(
-			array(
-				'repo' => 'octalmage/GitHub Shortcode',
-				'trim' => 0,
-			),
-			$atts
-		)
+	$defaults = array(
+		'repo' => 'octalmage/GitHub Shortcode',
+		'trim' => 0,
 	);
+
+	$atts = shortcode_atts(
+		$defaults,
+		$atts,
+		'github_readme'
+	);
+
+	$repo = empty( $atts['repo'] ) ? $defaults['repo'] : $atts['repo'];
+	$trim = empty( $atts['trim'] ) ? $defaults['trim'] : $atts['trim'];
 
 	$transient = "github_readme_" . $repo . "_" . $trim;
 
@@ -62,18 +66,25 @@ function github_readme_default( $atts ) {
  * @return string
  */
 function github_readme_markdown( $atts ) {
-	extract(
-		shortcode_atts(
-			array(
-				'repo'   => 'octalmage/GitHub Shortcode',
-				'trim'   => 0,
-				'cache'  => 60,
-				'file'   => '/readme',
-				'branch' => 'master',
-			),
-			$atts
-		)
+	$defaults = array(
+		'repo'   => 'octalmage/GitHub Shortcode',
+		'trim'   => 0,
+		'cache'  => 60,
+		'file'   => '/readme',
+		'branch' => 'master',
 	);
+
+	$atts = shortcode_atts(
+		$defaults,
+		$atts,
+		'github_markdown'
+	);
+
+	$repo   = empty( $atts['repo'] ) ? $defaults['repo'] : $atts['repo'];
+	$trim   = empty( $atts['trim'] ) ? $defaults['trim'] : $atts['trim'];
+	$cache  = empty( $atts['cache'] ) ? $defaults['cache'] : $atts['cache'];
+	$file   = empty( $atts['file'] ) ? $defaults['file'] : $atts['file'];
+	$branch = empty( $atts['branch'] ) ? $defaults['branch'] : $atts['branch'];
 
 	$transient = "github_markdown_" . $repo . "_" . $file . "_" . $trim;
 
@@ -100,17 +111,23 @@ function github_readme_markdown( $atts ) {
  * @return string
  */
 function github_readme_wikipage( $atts ) {
-	extract(
-		shortcode_atts(
-			array(
-				'repo'  => 'octalmage/GitHub Shortcode',
-				'trim'  => 0,
-				'cache' => 60,
-				'page'  => '',
-			),
-			$atts
-		)
+	$defaults = array(
+		'repo'  => 'octalmage/GitHub Shortcode',
+		'trim'  => 0,
+		'cache' => 60,
+		'page'  => '',
 	);
+
+	shortcode_atts(
+		$defaults,
+		$atts,
+		'github_wikipage'
+	);
+
+	$repo  = empty( $atts['repo'] ) ? $defaults['repo'] : $atts['repo'];
+	$trim  = empty( $atts['trim'] ) ? $defaults['trim'] : $atts['trim'];
+	$cache = empty( $atts['cache'] ) ? $defaults['cache'] : $atts['cache'];
+	$page  = empty( $atts['page'] ) ? $defaults['page'] : $atts['page'];
 
 	$transient = "github_wikipage_" . $repo . "_" . $page;
 
