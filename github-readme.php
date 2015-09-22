@@ -25,8 +25,10 @@ add_shortcode( 'github_wikipage', 'github_readme_wikipage' );
  */
 function github_readme_default( $atts ) {
 	$defaults = array(
-		'repo' => 'octalmage/GitHub Shortcode',
-		'trim' => 0,
+		'repo'   => 'octalmage/GitHub Shortcode',
+		'trim'   => 0,
+		'cache'  => 12 * HOUR_IN_SECONDS,
+		'branch' => '',
 	);
 
 	$atts = shortcode_atts(
@@ -35,15 +37,21 @@ function github_readme_default( $atts ) {
 		'github_readme'
 	);
 
-	$repo = empty( $atts['repo'] ) ? $defaults['repo'] : $atts['repo'];
-	$trim = empty( $atts['trim'] ) ? $defaults['trim'] : abs( (int) $atts['trim'] );
+	$repo   = empty( $atts['repo'] ) ? $defaults['repo'] : $atts['repo'];
+	$trim   = empty( $atts['trim'] ) ? $defaults['trim'] : abs( (int) $atts['trim'] );
+	$cache  = empty( $atts['cache'] ) ? $defaults['cache'] : abs( (int) $atts['cache'] );
+	$branch = empty( $atts['branch'] ) ? $defaults['branch'] : $atts['branch'];
 
-	$transient = github_readme_transient_name( 'github_readme_' . $repo . '_' . $trim );
+	$transient = github_readme_transient_name( 'github_readme_' . $repo . '_' . $branch . '_' . $trim . '_' . $cache );
 
 	$html = get_transient( $transient );
 
 	if ( false === $html ) {
 		$url = 'https://api.github.com/repos/' . $repo . '/readme';
+
+		if ( ! empty( $branch ) ) {
+			$url .= '?ref=' . $branch;
+		}
 
 		$data = github_readme_get_url( $url );
 
@@ -52,7 +60,7 @@ function github_readme_default( $atts ) {
 		$markdown = github_readme_trim_markdown( $markdown, $trim );
 
 		$html = Markdown::defaultTransform( $markdown );
-		set_transient( $transient, $html, 12 * HOUR_IN_SECONDS );
+		set_transient( $transient, $html, $cache );
 	}
 
 	return $html;
@@ -189,7 +197,10 @@ function github_readme_trim_markdown( $markdown, $lines = 0 ) {
  * @param string $key
  *
  * @return string
+ *
+ * Because the _transient_timeout_ sibling record takes 19 characters from the 64 available for the name, string has max length of 45.
+ * In this case this leaves 31 characters of the hash intact, which should be enough uniqueness to avoid clashes.
  */
 function github_readme_transient_name( $key ) {
-	return 'github_readme_' . md5( $key );
+	return substr( 'github_readme_' . wp_hash( $key ), 0, 45 );
 }
