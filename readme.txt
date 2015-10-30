@@ -1,5 +1,5 @@
 === Github README ===
-Contributors: octalmage, olensmar
+Contributors: octalmage, olensmar, ianmjones
 Donate link: http://jason.stallin.gs
 Tags: github, embed, shortcode, readme, markdown
 Requires at least: 3.0.1
