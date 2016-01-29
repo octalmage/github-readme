@@ -8,9 +8,9 @@
  * Author URI: http://jason.stallin.gs
  */
 
-require_once 'Michelf/Markdown.inc.php';
+require_once 'Michelf/MarkdownExtra.inc.php';
 
-use \Michelf\Markdown;
+use \Michelf\MarkdownExtra;
 
 add_shortcode( 'github_readme', 'github_readme_default' );
 add_shortcode( 'github_markdown', 'github_readme_markdown' );
@@ -104,7 +104,7 @@ function github_readme_markdown( $atts ) {
 		$markdown = github_readme_get_url( $url );
 		$markdown = github_readme_trim_markdown( $markdown, $trim );
 
-		$html = Markdown::defaultTransform( $markdown );
+		$html = MarkdownExtra::defaultTransform( $markdown );
 		set_transient( $transient, $html, $cache );
 	}
 
