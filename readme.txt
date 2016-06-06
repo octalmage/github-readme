@@ -50,6 +50,14 @@ trim and cache also supported.
 
 
 == Changelog ==
+= 0.1.1 =
+* Add "cache" attribute to the github_readme shortcode.
+* Add "branch" attribute to the github_readme shortcode.
+* Add the ability to use the `shortcode_atts_{$shortcode}` filter.
+* Fix transients so they are properly referenced when attributes are changed.
+
+Special thanks to ianmjones!
+
 = 0.1.0 =
 * Added new github_markdown and github_wikipage shortcodes (thanks olensmar!).
 
