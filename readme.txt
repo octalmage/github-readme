@@ -1,9 +1,9 @@
 === Github README ===
-Contributors: octalmage, olensmar, ianmjones
+Contributors: octalmage, olensmar, ianmjones, nlenkowski
 Donate link: http://jason.stallin.gs
 Tags: github, embed, shortcode, readme, markdown
 Requires at least: 3.0.1
-Tested up to: 4.3.1
+Tested up to: 4.5.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -50,6 +50,11 @@ trim and cache also supported.
 
 
 == Changelog ==
+= 0.2.0 =
+* Improved markdown rendering with MarkdownExtra.
+
+Special thanks to nlenkowski!
+
 = 0.1.1 =
 * Add "cache" attribute to the github_readme shortcode.
 * Add "branch" attribute to the github_readme shortcode.
