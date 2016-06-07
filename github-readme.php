@@ -59,7 +59,7 @@ function github_readme_default( $atts ) {
 		$markdown = base64_decode( $json->content );
 		$markdown = github_readme_trim_markdown( $markdown, $trim );
 
-		$html = Markdown::defaultTransform( $markdown );
+		$html = MarkdownExtra::defaultTransform( $markdown );
 		set_transient( $transient, $html, $cache );
 	}
 
@@ -147,7 +147,7 @@ function github_readme_wikipage( $atts ) {
 		$markdown = github_readme_get_url( $url );
 		$markdown = github_readme_trim_markdown( $markdown, $trim );
 
-		$html = Markdown::defaultTransform( $markdown );
+		$html = MarkdownExtra::defaultTransform( $markdown );
 		set_transient( $transient, $html, $cache );
 	}
 
