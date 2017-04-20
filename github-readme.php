@@ -29,7 +29,7 @@ function github_readme_default( $atts ) {
 		'trim'   => 0,
 		'cache'  => 12 * HOUR_IN_SECONDS,
 		'branch' => '',
-		'token' => '',
+		'token' => $_ENV["GIT_TOKEN"],
 	);
 
 	$atts = shortcode_atts(
@@ -82,7 +82,7 @@ function github_readme_markdown( $atts ) {
 		'cache'  => 60,
 		'file'   => '/readme',
 		'branch' => 'master',
-		'token' => '',
+		'token' => $_ENV["GIT_TOKEN"],
 	);
 
 	$atts = shortcode_atts(
@@ -128,7 +128,7 @@ function github_readme_wikipage( $atts ) {
 		'trim'  => 0,
 		'cache' => 60,
 		'page'  => '',
-		'token' => '',
+		'token' => $_ENV["GIT_TOKEN"],
 	);
 
 	shortcode_atts(
