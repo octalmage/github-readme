@@ -2,6 +2,8 @@
 #
 # Markdown  -  A text-to-HTML conversion tool for web writers
 #
+# Updated (PHP 8.0 support) 2022 Niema Moshiri
+#
 # PHP Markdown  
 # Copyright (c) 2004-2015 Michel Fortin  
 # <https://michelf.ca/projects/php-markdown/>
@@ -797,7 +799,7 @@ class Markdown implements MarkdownInterface {
 		if ($matches[2] == '-' && preg_match('{^-(?: |$)}', $matches[1]))
 			return $matches[0];
 		
-		$level = $matches[2]{0} == '=' ? 1 : 2;
+		$level = $matches[2][0] == '=' ? 1 : 2;
 
 		# id attribute generation
 		$idAtt = $this->_generateIdFromHeaderValue($matches[1]);
