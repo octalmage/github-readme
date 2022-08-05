@@ -50,6 +50,9 @@ trim and cache also supported.
 
 
 == Changelog ==
+= 0.2.1 =
+* Updated syntax for PHP 8.0 compatibility (Niema Moshiri)
+
 = 0.2.0 =
 * Improved markdown rendering with MarkdownExtra.
 
