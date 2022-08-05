@@ -1336,7 +1336,7 @@ class MarkdownExtra extends \Michelf\Markdown {
 
 		$classes = array();
 		if ($classname != "") {
-			if ($classname{0} == '.')
+			if ($classname[0] == '.')
 				$classname = substr($classname, 1);
 			$classes[] = $this->code_class_prefix.$classname;
 		}
