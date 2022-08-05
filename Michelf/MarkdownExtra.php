@@ -604,7 +604,7 @@ class MarkdownExtra extends \Michelf\Markdown {
 				# first character as filtered to prevent an infinite loop in the 
 				# parent function.
 				#
-				return array($original_text{0}, substr($original_text, 1));
+				return array($original_text[0], substr($original_text, 1));
 			}
 			
 			$block_text .= $parts[0]; # Text before current tag.
