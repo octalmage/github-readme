@@ -1139,7 +1139,7 @@ class Markdown implements MarkdownInterface {
 				} else {
 					# Other closing marker: close one em or strong and
 					# change current token state to match the other
-					$token_stack[0] = str_repeat($token{0}, 3-$token_len);
+					$token_stack[0] = str_repeat($token[0], 3-$token_len);
 					$tag = $token_len == 2 ? "strong" : "em";
 					$span = $text_stack[0];
 					$span = $this->runSpanGamut($span);
