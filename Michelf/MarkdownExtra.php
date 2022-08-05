@@ -2,6 +2,8 @@
 #
 # Markdown Extra  -  A text-to-HTML conversion tool for web writers
 #
+# Updated (PHP 8.0 support) 2022 Niema Moshiri
+#
 # PHP Markdown Extra
 # Copyright (c) 2004-2015 Michel Fortin  
 # <https://michelf.ca/projects/php-markdown/>
@@ -160,9 +162,9 @@ class MarkdownExtra extends \Michelf\Markdown {
 		$attributes = array();
 		$id = false;
 		foreach ($elements as $element) {
-			if ($element{0} == '.') {
+			if ($element[0] == '.') {
 				$classes[] = substr($element, 1);
-			} else if ($element{0} == '#') {
+			} else if ($element[0] == '#') {
 				if ($id === false) $id = substr($element, 1);
 			} else if (strpos($element, '=') > 0) {
 				$parts = explode('=', $element, 2);
