@@ -433,7 +433,7 @@ class MarkdownExtra extends \Michelf\Markdown {
 			#
 			# Check for: Indented code block.
 			#
-			else if ($tag{0} == "\n" || $tag{0} == " ") {
+			else if ($tag[0] == "\n" || $tag[0] == " ") {
 				# Indented code block: pass it unchanged, will be handled 
 				# later.
 				$parsed .= $tag;
@@ -442,7 +442,7 @@ class MarkdownExtra extends \Michelf\Markdown {
 			# Check for: Code span marker
 			# Note: need to check this after backtick fenced code blocks
 			#
-			else if ($tag{0} == "`") {
+			else if ($tag[0] == "`") {
 				# Find corresponding end marker.
 				$tag_re = preg_quote($tag);
 				if (preg_match('{^(?>.+?|\n(?!\n))*?(?<!`)'.$tag_re.'(?!`)}',
@@ -480,7 +480,7 @@ class MarkdownExtra extends \Michelf\Markdown {
 			#            HTML Comments, processing instructions.
 			#
 			else if (preg_match('{^<(?:'.$this->clean_tags_re.')\b}', $tag) ||
-				$tag{1} == '!' || $tag{1} == '?')
+				$tag[1] == '!' || $tag[1] == '?')
 			{
 				# Need to parse tag and following text using the HTML parser.
 				# (don't check for markdown attribute)
@@ -499,8 +499,8 @@ class MarkdownExtra extends \Michelf\Markdown {
 				#
 				# Increase/decrease nested tag count.
 				#
-				if ($tag{1} == '/')						$depth--;
-				else if ($tag{strlen($tag)-2} != '/')	$depth++;
+				if ($tag[1] == '/')						$depth--;
+				else if ($tag[strlen($tag)-2] != '/')	$depth++;
 
 				if ($depth < 0) {
 					#
@@ -616,7 +616,7 @@ class MarkdownExtra extends \Michelf\Markdown {
 			#			 Comments and Processing Instructions.
 			#
 			if (preg_match('{^</?(?:'.$this->auto_close_tags_re.')\b}', $tag) ||
-				$tag{1} == '!' || $tag{1} == '?')
+				$tag[1] == '!' || $tag[1] == '?')
 			{
 				# Just add the tag to the block as if it was text.
 				$block_text .= $tag;
@@ -627,8 +627,8 @@ class MarkdownExtra extends \Michelf\Markdown {
 				# the tag's name match base tag's.
 				#
 				if (preg_match('{^</?'.$base_tag_name_re.'\b}', $tag)) {
-					if ($tag{1} == '/')						$depth--;
-					else if ($tag{strlen($tag)-2} != '/')	$depth++;
+					if ($tag[1] == '/')						$depth--;
+					else if ($tag[strlen($tag)-2] != '/')	$depth++;
 				}
 				
 				#
