@@ -3,7 +3,7 @@
  * Plugin Name: GitHub README
  * Plugin URI: https://github.com/octalmage/github-readme
  * Description: Github README is a plugin that allows you to embed a GitHub README in a page or post using a simple shortcode.
- * Version: 0.2.1
+ * Version: 0.2.2
  * Author: Jason Stallings
  * Author URI: http://jason.stallin.gs
  */
@@ -106,7 +106,7 @@ function github_readme_markdown( $atts ) {
 		$url = 'https://raw.githubusercontent.com/' . $repo . '/' . $branch . '/' . $file;
 
 		$markdown = github_readme_get_url( $url, $token );
-		$markdown = github_readme_trim_markdown( $markdown, $trim );
+		//$markdown = github_readme_trim_markdown( $markdown, $trim );
 
 		$html = MarkdownExtra::defaultTransform( $markdown );
 		set_transient( $transient, $html, $cache );
@@ -169,17 +169,7 @@ function github_readme_wikipage( $atts ) {
  */
 function github_readme_get_url( $url, $token ) {
 	$data = '';
-
-	if ($token !== '') {
-		$headers = array(
-			'Authorization' => 'token ' . $token,
-			'Accept' => 'application/vnd.github.v3.raw'
-		);
-		$args = array('headers' => $headers);
-		$response = wp_remote_get( $url, $args );
-	} else {
-		$response = wp_remote_get( $url );
-	}
+	$response = wp_remote_get( $url ); // NIEMA: ignore $token; not sure why it breaks things
 
 	if ( ! empty( $response['response']['code'] ) && 200 === $response['response']['code'] && ! empty( $response['body'] ) ) {
 		$data = $response['body'];
