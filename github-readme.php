@@ -3,7 +3,7 @@
  * Plugin Name: GitHub README
  * Plugin URI: https://github.com/octalmage/github-readme
  * Description: Github README is a plugin that allows you to embed a GitHub README in a page or post using a simple shortcode.
- * Version: 0.2.2
+ * Version: 0.2.3
  * Author: Jason Stallings
  * Author URI: http://jason.stallin.gs
  */
@@ -29,7 +29,6 @@ function github_readme_default( $atts ) {
 		'trim'   => 0,
 		'cache'  => 12 * HOUR_IN_SECONDS,
 		'branch' => '',
-		'token' => $_ENV["GIT_TOKEN"],
 	);
 
 	$atts = shortcode_atts(
@@ -42,7 +41,6 @@ function github_readme_default( $atts ) {
 	$trim   = empty( $atts['trim'] ) ? $defaults['trim'] : abs( (int) $atts['trim'] );
 	$cache  = empty( $atts['cache'] ) ? $defaults['cache'] : abs( (int) $atts['cache'] );
 	$branch = empty( $atts['branch'] ) ? $defaults['branch'] : $atts['branch'];
-	$token = empty( $atts['token'] ) ? $defaults['token'] : $atts['token'];
 
 	$transient = github_readme_transient_name( 'github_readme_' . $repo . '_' . $branch . '_' . $trim . '_' . $cache );
 
@@ -55,7 +53,7 @@ function github_readme_default( $atts ) {
 			$url .= '?ref=' . $branch;
 		}
 
-		$data = github_readme_get_url( $url, $token );
+		$data = github_readme_get_url( $url );
 
 		$json     = json_decode( $data );
 		$markdown = base64_decode( $json->content );
@@ -82,7 +80,6 @@ function github_readme_markdown( $atts ) {
 		'cache'  => 60,
 		'file'   => '/readme',
 		'branch' => 'master',
-		'token' => $_ENV["GIT_TOKEN"],
 	);
 
 	$atts = shortcode_atts(
@@ -96,7 +93,6 @@ function github_readme_markdown( $atts ) {
 	$cache  = empty( $atts['cache'] ) ? $defaults['cache'] : abs( (int) $atts['cache'] );
 	$file   = empty( $atts['file'] ) ? $defaults['file'] : $atts['file'];
 	$branch = empty( $atts['branch'] ) ? $defaults['branch'] : $atts['branch'];
-	$token = empty( $atts['token'] ) ? $defaults['token'] : $atts['token'];
 
 	$transient = github_readme_transient_name( 'github_markdown_' . $repo . '_' . $branch . '_' . $file . '_' . $trim . '_' . $cache );
 
@@ -105,8 +101,8 @@ function github_readme_markdown( $atts ) {
 	if ( false === $html ) {
 		$url = 'https://raw.githubusercontent.com/' . $repo . '/' . $branch . '/' . $file;
 
-		$markdown = github_readme_get_url( $url, $token );
-		//$markdown = github_readme_trim_markdown( $markdown, $trim );
+		$markdown = github_readme_get_url( $url );
+		$markdown = github_readme_trim_markdown( $markdown, $trim );
 
 		$html = MarkdownExtra::defaultTransform( $markdown );
 		set_transient( $transient, $html, $cache );
@@ -128,7 +124,6 @@ function github_readme_wikipage( $atts ) {
 		'trim'  => 0,
 		'cache' => 60,
 		'page'  => '',
-		'token' => $_ENV["GIT_TOKEN"],
 	);
 
 	shortcode_atts(
@@ -141,7 +136,6 @@ function github_readme_wikipage( $atts ) {
 	$trim  = empty( $atts['trim'] ) ? $defaults['trim'] : abs( (int) $atts['trim'] );
 	$cache = empty( $atts['cache'] ) ? $defaults['cache'] : abs( (int) $atts['cache'] );
 	$page  = empty( $atts['page'] ) ? $defaults['page'] : $atts['page'];
-	$token = empty( $atts['token'] ) ? $defaults['token'] : $atts['token'];
 
 	$transient = github_readme_transient_name( 'github_wikipage_' . $repo . '_' . $page . '_' . $trim . '_' . $cache );
 
@@ -150,7 +144,7 @@ function github_readme_wikipage( $atts ) {
 	if ( false === $html ) {
 		$url = 'https://raw.githubusercontent.com/wiki/' . $repo . '/' . $page . '.md';
 
-		$markdown = github_readme_get_url( $url, $token );
+		$markdown = github_readme_get_url( $url );
 		$markdown = github_readme_trim_markdown( $markdown, $trim );
 
 		$html = MarkdownExtra::defaultTransform( $markdown );
@@ -167,7 +161,7 @@ function github_readme_wikipage( $atts ) {
  *
  * @return string
  */
-function github_readme_get_url( $url, $token ) {
+function github_readme_get_url( $url ) { // NIEMA: removed $token argument; not sure why it breaks things
 	$data = '';
 	$response = wp_remote_get( $url ); // NIEMA: ignore $token; not sure why it breaks things
 
