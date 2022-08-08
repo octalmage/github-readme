@@ -50,6 +50,15 @@ trim and cache also supported.
 
 
 == Changelog ==
+= 0.2.3 =
+* Removed all use of tokens in grabbing URL (fixed warning: Undefined array key "GIT_TOKEN")
+
+= 0.2.2 =
+* Fixed issue where wp_remote_get gets 404 when given a token (Niema Moshiri)
+
+= 0.2.1 =
+* Updated syntax for PHP 8.0 compatibility (Niema Moshiri)
+
 = 0.2.0 =
 * Improved markdown rendering with MarkdownExtra.
 
